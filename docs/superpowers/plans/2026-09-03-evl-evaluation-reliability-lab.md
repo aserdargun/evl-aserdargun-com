@@ -6,7 +6,7 @@
 
 **Architecture:** A React + Vite + TypeScript SPA keeps reference data, localization, contract state, and a pure deterministic evaluation engine in separate modules. The browser persists only the working contract, produces local JSON exports, and never sends user data to a backend. GitHub Actions validates a prebuilt `dist` artifact and deploys that exact artifact to one Free Azure Static Web App in `aserdargun subscription 2`.
 
-**Tech Stack:** Node.js 22, npm 10, React 19, TypeScript 7, Vite 8, Zod 4, Vitest 4, Testing Library, Playwright Chromium, CSS modules organized as global design tokens plus focused component styles, GitHub Actions, Azure Static Web Apps.
+**Tech Stack:** Node.js 22, npm 10, React 19, TypeScript 6, Vite 8, Zod 4, Vitest 4, Testing Library, Playwright Chromium, CSS modules organized as global design tokens plus focused component styles, GitHub Actions, Azure Static Web Apps.
 
 **Spec:** `docs/superpowers/specs/2026-09-02-evl-evaluation-reliability-lab-design.md`
 
@@ -234,7 +234,7 @@ Create `package.json` with exact package versions observed at planning time and 
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.6",
     "jsdom": "30.0.1",
-    "typescript": "7.0.2",
+    "typescript": "6.0.3",
     "typescript-eslint": "8.69.0",
     "vite": "8.2.2",
     "vitest": "4.1.11"
