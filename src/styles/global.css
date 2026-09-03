@@ -1,0 +1,12 @@
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--page); color-scheme: dark; }
+body { margin: 0; min-width: 320px; background: var(--page); color: var(--text); font-family: var(--font-sans); font-size: 15px; line-height: 1.45; }
+button, input, select, textarea { color: inherit; font: inherit; }
+button, a, input, select { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-underline-offset: 4px; }
+button { cursor: pointer; }
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
