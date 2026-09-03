@@ -36,3 +36,22 @@ export async function verifyArtifact() {
   assert.match(release.sha, /^[0-9a-f]{40}$/);
   assert.equal(Number.isNaN(new Date(release.builtAt).getTime()), false);
 }
+
+export async function verifyWorkflow() {
+  const workflow = await readFile(
+    path.join(repositoryRoot, ".github/workflows/deploy-swa-evl-aserdargun-com.yml"),
+    "utf8",
+  );
+  assert.match(workflow, /push:\n\s+branches: \[main\]/);
+  assert.match(workflow, /permissions:\n\s+contents: read/);
+  assert.match(workflow, /group: swa-evl-aserdargun-com-production/);
+  assert.match(workflow, /cancel-in-progress: false/);
+  assert.match(workflow, /actions\/checkout@11d5960a326750d5838078e36cf38b85af677262/);
+  assert.match(workflow, /actions\/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020/);
+  assert.match(workflow, /Azure\/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9/);
+  assert.match(workflow, /secrets\.AZURE_STATIC_WEB_APPS_API_TOKEN_SWA_EVL_ASERDARGUN_COM/);
+  assert.match(workflow, /app_location: dist/);
+  assert.match(workflow, /output_location: ""/);
+  assert.match(workflow, /skip_app_build: true/);
+  assert.doesNotMatch(workflow, /repo_token:|deployment_action:|api_location:/);
+}
