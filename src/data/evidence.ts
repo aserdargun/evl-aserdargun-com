@@ -1,0 +1,48 @@
+import { evidenceSourceSchema } from "../domain/schemas";
+
+export const evidenceSources = [
+  {
+    id: "anthropic-agent-evals",
+    title: "Demystifying evals for AI agents",
+    organization: "Anthropic",
+    url: "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+    publishedAt: null,
+    verifiedAt: "2026-09-03",
+    tier: "official_guidance",
+    supportedPatternIds: ["trajectory-inspection", "outcome-verification", "repeated-trials"],
+    limitationKey: "evidence.limitation.anthropic",
+  },
+  {
+    id: "nist-ai-measurement",
+    title: "AI Measurement and Evaluation",
+    organization: "National Institute of Standards and Technology",
+    url: "https://www.nist.gov/ai-measurement-and-evaluation",
+    publishedAt: null,
+    verifiedAt: "2026-09-03",
+    tier: "standard",
+    supportedPatternIds: ["uncertainty-accounting", "regression-gates", "adversarial-evaluation"],
+    limitationKey: "evidence.limitation.nistMeasurement",
+  },
+  {
+    id: "nist-ai-800-3",
+    title: "A Taxonomy of Terminology and Definitions for AI Test, Evaluation, Verification and Validation",
+    organization: "National Institute of Standards and Technology",
+    url: "https://doi.org/10.6028/NIST.AI.800-3",
+    publishedAt: "2024-07-17",
+    verifiedAt: "2026-09-03",
+    tier: "standard",
+    supportedPatternIds: ["outcome-verification", "uncertainty-accounting", "regression-gates"],
+    limitationKey: "evidence.limitation.nistTaxonomy",
+  },
+  {
+    id: "openai-graders",
+    title: "Graders",
+    organization: "OpenAI",
+    url: "https://platform.openai.com/docs/guides/graders",
+    publishedAt: null,
+    verifiedAt: "2026-09-03",
+    tier: "official_guidance",
+    supportedPatternIds: ["output-grading", "trajectory-inspection", "regression-gates"],
+    limitationKey: "evidence.limitation.openai",
+  },
+].map((source) => evidenceSourceSchema.parse(source));
