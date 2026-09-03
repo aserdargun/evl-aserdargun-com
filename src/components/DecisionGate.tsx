@@ -3,11 +3,11 @@ import type { Locale, MessageKey } from "../i18n";
 import { t } from "../i18n";
 import { Icon } from "./icons";
 
-type Props = { locale: Locale; result: EvaluationResult; onExport: () => void; onReset: () => void };
+type Props = { locale: Locale; result: EvaluationResult; sticky: boolean; onExport: () => void; onReset: () => void };
 
-export function DecisionGate({ locale, result, onExport, onReset }: Props) {
+export function DecisionGate({ locale, result, sticky, onExport, onReset }: Props) {
   return (
-    <aside className={`decision-rail gate-${result.gate}`} aria-labelledby="gate-heading">
+    <aside className={`decision-rail gate-${result.gate}${sticky ? " is-sticky" : ""}`} aria-labelledby="gate-heading">
       <h2 id="gate-heading">{t(locale, "gate.heading")}</h2>
       <div className="gate-box" role="status" aria-label={t(locale, "gate.heading")} aria-live="polite" aria-atomic="true">
         <div className="gate-value"><Icon name={result.gate === "hold" ? "warning" : "check"} /><strong>{t(locale, `gate.${result.gate}` as MessageKey)}</strong></div>

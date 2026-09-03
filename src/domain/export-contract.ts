@@ -38,7 +38,7 @@ export function downloadExport(
   try {
     const link = targetDocument.createElement("a");
     link.href = objectUrl;
-    link.download = `evl-evidence-${envelope.contract.targetId}-${envelope.exportedAt.slice(0, 10)}.json`;
+    link.download = `evl-${envelope.contract.targetId}-${envelope.exportedAt.slice(0, 10)}.json`;
     link.click();
   } finally {
     targetWindow.URL.revokeObjectURL(objectUrl);

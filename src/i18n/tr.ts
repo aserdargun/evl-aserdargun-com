@@ -121,7 +121,7 @@ export const tr = {
   "portfolio.wfm.role": "Planlama değerlendirmesi",
   "portfolio.eng": "ENG",
   "portfolio.eng.role": "Fiziksel görev başarısı",
-  "actions.export": "Kanıt paketini dışa aktar",
+  "actions.export": "JSON dışa aktar",
   "actions.reset": "Sözleşmeyi sıfırla",
   "actions.confirm": "Sıfırla",
   "actions.cancel": "İptal",

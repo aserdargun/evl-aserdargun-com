@@ -19,6 +19,7 @@ export function App({ initialPath }: { initialPath?: string }) {
   const [locale, setLocale] = useState<Locale>(() => localeFromPath(initialPath ?? window.location.pathname));
   const [evidenceFilter, setEvidenceFilter] = useState<"all" | LayerId>("all");
   const [resetOpen, setResetOpen] = useState(false);
+  const [stickyGate, setStickyGate] = useState(false);
   const workbench = useWorkbench(locale);
 
   useEffect(() => {
@@ -29,6 +30,20 @@ export function App({ initialPath }: { initialPath?: string }) {
     const onPopState = () => setLocale(localeFromPath(window.location.pathname));
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    const updateStickyGate = () => {
+      const contractHeading = document.getElementById("contract-heading");
+      setStickyGate(window.innerWidth < 760 && Boolean(contractHeading && contractHeading.getBoundingClientRect().bottom < 0));
+    };
+    updateStickyGate();
+    window.addEventListener("scroll", updateStickyGate, { passive: true });
+    window.addEventListener("resize", updateStickyGate);
+    return () => {
+      window.removeEventListener("scroll", updateStickyGate);
+      window.removeEventListener("resize", updateStickyGate);
+    };
   }, []);
 
   const exportEvidence = () => {
@@ -47,7 +62,7 @@ export function App({ initialPath }: { initialPath?: string }) {
             <ContractEditor locale={locale} contract={workbench.contract} onChange={workbench.updateField} />
             <CoverageMatrix locale={locale} contract={workbench.contract} target={workbench.target} onChange={workbench.updateLayer} />
           </div>
-          <DecisionGate locale={locale} result={workbench.result} onExport={exportEvidence} onReset={() => setResetOpen(true)} />
+          <DecisionGate locale={locale} result={workbench.result} sticky={stickyGate} onExport={exportEvidence} onReset={() => setResetOpen(true)} />
         </section>
         <div className="downstream-layout">
           <PatternLibrary locale={locale} />

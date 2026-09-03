@@ -87,7 +87,7 @@ describe("EVL application", () => {
     render(<App initialPath="/en" />);
     expect(screen.getByRole("alert")).toHaveTextContent("Stored workbench data was invalid");
 
-    await user.click(screen.getByRole("button", { name: "Export evidence pack" }));
+    await user.click(screen.getByRole("button", { name: "Export JSON" }));
     expect(createObjectURL).toHaveBeenCalledOnce();
     expect(revokeObjectURL).toHaveBeenCalledOnce();
   });

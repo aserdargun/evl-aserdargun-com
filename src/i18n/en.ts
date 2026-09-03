@@ -119,7 +119,7 @@ export const en = {
   "portfolio.wfm.role": "Planning evaluation",
   "portfolio.eng": "ENG",
   "portfolio.eng.role": "Physical task success",
-  "actions.export": "Export evidence pack",
+  "actions.export": "Export JSON",
   "actions.reset": "Reset contract",
   "actions.confirm": "Reset",
   "actions.cancel": "Cancel",

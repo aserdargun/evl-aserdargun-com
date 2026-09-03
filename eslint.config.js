@@ -5,7 +5,16 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", "playwright-report", "test-results", "eslint.config.js"] },
+  {
+    ignores: [
+      "dist",
+      "playwright-report",
+      "test-results",
+      "eslint.config.js",
+      "scripts/**/*.mjs",
+      "tests/**/*.mjs",
+    ],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   reactHooks.configs.flat.recommended,
