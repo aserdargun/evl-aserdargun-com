@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="evl">
+  <rect width="320" height="320" rx="64" fill="#121310"/>
+  <circle cx="160" cy="142" r="108" fill="#c8ff36"/>
+  <g transform="translate(60 42)">
+    <g fill="none" stroke="#0c0d0a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 60 L60 60 L45 28 Z" fill="#0c0d0a" />
+      <path d="M140 60 L170 60 L155 28 Z" fill="#0c0d0a" />
+      <line x1="45" y1="60" x2="155" y2="60" />
+      <line x1="100" y1="60" x2="100" y2="160" />
+      <path d="M70 160 L130 160" />
+    </g>
+    <path d="M82 178 L94 190 L122 158" fill="none" stroke="#0c0d0a"
+      stroke-width="10" stroke-linecap="round" stroke-linejoin="round" /></g>
+  <text x="160" y="296" text-anchor="middle" fill="#c8ff36"
+    font-family="Inter, Helvetica, Arial, sans-serif" font-size="40" font-weight="800"
+    letter-spacing="-2">EVL</text>
+</svg>
