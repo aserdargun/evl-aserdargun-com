@@ -11,9 +11,9 @@ export function Header({ locale, onLocaleChange }: Props) {
       <div className="brand-lockup">
         <span className="brand-mark">EVL</span>
         <span className="brand-rule" aria-hidden="true" />
-        <h1>{locale === "en" ? "AI Evaluation & Reliability Lab" : "AI Değerlendirme ve Güvenilirlik Laboratuvarı"}</h1>
+        <h1>{t(locale, "app.name")}</h1>
       </div>
-      <nav className="primary-nav" aria-label="Primary">
+      <nav className="primary-nav" aria-label={t(locale, "nav.primary")}>
         <a className="active" href="#workbench">{t(locale, "nav.workbench")}</a>
         <a href="#patterns">{t(locale, "nav.patterns")}</a>
         <a href="#evidence">{t(locale, "nav.evidence")}</a>

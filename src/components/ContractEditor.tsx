@@ -1,5 +1,5 @@
 import type { EvaluationContract } from "../domain/schemas";
-import type { Locale } from "../i18n";
+import type { Locale, MessageKey } from "../i18n";
 import { t } from "../i18n";
 
 type Props = {
@@ -9,7 +9,9 @@ type Props = {
 };
 
 export function ContractEditor({ locale, contract, onChange }: Props) {
-  const graderMix = contract.graders.map(({ family }) => family).join(" + ");
+  const graderMix = contract.graders
+    .map(({ family }) => t(locale, `grader.${family}` as MessageKey))
+    .join(" + ");
   return (
     <section className="contract-editor" aria-labelledby="contract-heading">
       <div className="section-heading">
@@ -19,7 +21,11 @@ export function ContractEditor({ locale, contract, onChange }: Props) {
       <div className="contract-grid">
         <label className="field field-claim">
           <span>{t(locale, "contract.claim")}</span>
-          <input value={contract.claim} onChange={(event) => onChange("claim", event.target.value)} required />
+          <textarea rows={2} value={contract.claim} onChange={(event) => onChange("claim", event.target.value)} required />
+        </label>
+        <label className="field field-subject">
+          <span>{t(locale, "contract.subject")}</span>
+          <input value={contract.subject} onChange={(event) => onChange("subject", event.target.value)} required />
         </label>
         <label className="field field-version">
           <span>{t(locale, "contract.subjectVersion")}</span>
@@ -28,10 +34,10 @@ export function ContractEditor({ locale, contract, onChange }: Props) {
         <label className="field">
           <span>{t(locale, "contract.unit")}</span>
           <select value={contract.unit} onChange={(event) => onChange("unit", event.target.value as EvaluationContract["unit"])}>
-            <option value="output">Output</option>
-            <option value="trajectory">Trajectory</option>
-            <option value="outcome">Outcome</option>
-            <option value="mixed">Mixed</option>
+            <option value="output">{t(locale, "unit.output")}</option>
+            <option value="trajectory">{t(locale, "unit.trajectory")}</option>
+            <option value="outcome">{t(locale, "unit.outcome")}</option>
+            <option value="mixed">{t(locale, "unit.mixed")}</option>
           </select>
         </label>
         <label className="field field-taskset">
@@ -59,21 +65,24 @@ export function ContractEditor({ locale, contract, onChange }: Props) {
           <span>{t(locale, "contract.graderMix")}</span>
           <input value={graderMix} readOnly aria-readonly="true" />
         </label>
-        <label className="field">
+        <label className="field field-critical">
           <span>{t(locale, "contract.criticalFailures")}</span>
-          <input
+          <textarea
+            rows={2}
             value={contract.criticalFailures.join("; ")}
             onChange={(event) => onChange("criticalFailures", event.target.value.split(";").map((item) => item.trim()).filter(Boolean))}
+            aria-describedby="critical-failures-help"
             required
           />
+          <small id="critical-failures-help">{t(locale, "contract.criticalFailuresHelp")}</small>
         </label>
         <label className="field">
           <span>{t(locale, "contract.evidenceTier")}</span>
           <select value={contract.evidenceTier} onChange={(event) => onChange("evidenceTier", event.target.value as EvaluationContract["evidenceTier"])}>
-            <option value="standard">Standard</option>
-            <option value="official_guidance">Official guidance</option>
-            <option value="research">Research</option>
-            <option value="case_study">Case study</option>
+            <option value="standard">{t(locale, "tier.standard")}</option>
+            <option value="official_guidance">{t(locale, "tier.official_guidance")}</option>
+            <option value="research">{t(locale, "tier.research")}</option>
+            <option value="case_study">{t(locale, "tier.case_study")}</option>
           </select>
         </label>
         <label className="field field-review">

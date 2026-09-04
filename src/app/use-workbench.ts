@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { evidenceSources } from "../data/evidence";
-import { referenceContracts } from "../data/reference-contracts";
+import { referenceContractFor } from "../data/reference-contracts";
 import { targets } from "../data/targets";
 import { evaluateContract } from "../domain/evaluate-contract";
 import {
@@ -27,13 +27,7 @@ type WorkbenchOptions = {
 
 const currentTime = () => new Date();
 
-function referenceFor(targetId: TargetId): EvaluationContract {
-  const contract = referenceContracts.find((item) => item.targetId === targetId);
-  if (!contract) throw new Error(`Missing reference contract: ${targetId}`);
-  return structuredClone(contract);
-}
-
-function initialState(storage: Storage): {
+function initialState(storage: Storage, locale: Locale): {
   state: PersistedWorkbench;
   notice: PersistenceNotice;
 } {
@@ -43,7 +37,7 @@ function initialState(storage: Storage): {
     state: {
       schemaVersion: 1,
       selectedTargetId: "agent",
-      contract: referenceFor("agent"),
+      contract: referenceContractFor("agent", locale),
     },
     notice:
       loaded.status === "invalid" || loaded.status === "unsupported"
@@ -55,7 +49,7 @@ function initialState(storage: Storage): {
 export function useWorkbench(locale: Locale, options: WorkbenchOptions = {}) {
   const storage = options.storage ?? window.localStorage;
   const now = options.now ?? currentTime;
-  const [initial] = useState(() => initialState(storage));
+  const [initial] = useState(() => initialState(storage, locale));
   const [state, setState] = useState(initial.state);
   const [persistenceNotice, setPersistenceNotice] =
     useState<PersistenceNotice>(initial.notice);
@@ -107,7 +101,7 @@ export function useWorkbench(locale: Locale, options: WorkbenchOptions = {}) {
     persist({
       schemaVersion: 1,
       selectedTargetId: targetId,
-      contract: referenceFor(targetId),
+      contract: referenceContractFor(targetId, locale),
     });
   }
 
@@ -115,7 +109,7 @@ export function useWorkbench(locale: Locale, options: WorkbenchOptions = {}) {
     persist({
       schemaVersion: 1,
       selectedTargetId: state.selectedTargetId,
-      contract: referenceFor(state.selectedTargetId),
+      contract: referenceContractFor(state.selectedTargetId, locale),
     });
   }
 

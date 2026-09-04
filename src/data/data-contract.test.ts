@@ -60,15 +60,34 @@ describe("bundled EVL data", () => {
     }
   });
 
-  it("marks CTX planned and every active relationship link as HTTPS", () => {
-    expect(portfolioApps.find(({ code }) => code === "ctx")?.status).toBe(
-      "planned",
-    );
+  it("marks CTX active and every active relationship link as HTTPS", () => {
+    expect(portfolioApps.find(({ code }) => code === "ctx")).toMatchObject({
+      status: "active",
+      url: "https://ctx.aserdargun.com",
+    });
     expect(
       portfolioApps
         .filter(({ status }) => status === "active")
         .every(({ url }) => url?.startsWith("https://")),
     ).toBe(true);
-    expect(portfolioApps.find(({ code }) => code === "ctx")?.url).toBeUndefined();
+  });
+
+  it("ships current primary evidence metadata", () => {
+    expect(
+      evidenceSources.find(({ id }) => id === "anthropic-agent-evals"),
+    ).toMatchObject({ publishedAt: "2026-01-09", verifiedAt: "2026-09-04" });
+    expect(
+      evidenceSources.find(({ id }) => id === "openai-graders")?.url,
+    ).toBe("https://developers.openai.com/api/docs/guides/graders");
+    expect(
+      evidenceSources.find(({ id }) => id === "nist-ai-800-3")?.title,
+    ).toBe("Expanding the AI Evaluation Toolbox with Statistical Models");
+    expect(
+      evidenceSources.find(({ id }) => id === "nist-tevv-athlon"),
+    ).toMatchObject({
+      publishedAt: "2026-08-04",
+      verifiedAt: "2026-09-04",
+      tier: "official_guidance",
+    });
   });
 });

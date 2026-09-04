@@ -7,11 +7,15 @@ import { App } from "./App";
 
 const createObjectURL = vi.fn(() => "blob:evl");
 const revokeObjectURL = vi.fn();
+const anchorClick = vi
+  .spyOn(HTMLAnchorElement.prototype, "click")
+  .mockImplementation(() => undefined);
 
 describe("EVL application", () => {
   beforeEach(() => {
     createObjectURL.mockClear();
     revokeObjectURL.mockClear();
+    anchorClick.mockClear();
     Object.defineProperties(window.URL, {
       createObjectURL: { configurable: true, value: createObjectURL },
       revokeObjectURL: { configurable: true, value: revokeObjectURL },
@@ -44,15 +48,55 @@ describe("EVL application", () => {
     expect(document.documentElement.lang).toBe("tr");
   });
 
-  it("renders active links and a non-link planned CTX entry", () => {
+  it("localizes a fresh Turkish reference contract and its controls", () => {
+    render(<App initialPath="/tr" />);
+
+    expect(screen.getByLabelText("Değerlendirme iddiası")).toHaveValue(
+      "Ajan, güvenli ve incelenebilir izler üzerinden amaçlanan sonuca ulaşır.",
+    );
+    expect(screen.getByLabelText("Değerlendirme birimi")).toHaveDisplayValue(
+      "İz",
+    );
+    expect(screen.getByLabelText("Kanıt düzeyi")).toHaveDisplayValue(
+      "Resmî rehberlik",
+    );
+    expect(screen.getByLabelText("Değerlendirici bileşimi")).toHaveValue(
+      "kural tabanlı + insan",
+    );
+    expect(
+      screen.getByLabelText("Kanıtları katmana göre filtrele"),
+    ).toBeInTheDocument();
+    expect(document.title).toBe(
+      "EVL - Yapay Zekâ Değerlendirme ve Güvenilirlik Laboratuvarı",
+    );
+  });
+
+  it("renders Turkish decision details instead of engine-language text", async () => {
+    const user = userEvent.setup();
+    render(<App initialPath="/tr" />);
+
+    await user.click(
+      screen.getByRole("checkbox", { name: "Güvenlik kanıtı" }),
+    );
+
+    expect(screen.getByText("Kritik Güvenlik katmanı eksik.")).toBeVisible();
+    expect(
+      screen.queryByText("Critical layer safety is missing."),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders CTX as an active portfolio link", () => {
     render(<App initialPath="/en" />);
     expect(screen.getByRole("link", { name: /HNS/i })).toHaveAttribute(
       "href",
       "https://hns.aserdargun.com",
     );
     const ctx = screen.getByTestId("portfolio-ctx");
-    expect(ctx).toHaveTextContent("Planned");
-    expect(within(ctx).queryByRole("link")).not.toBeInTheDocument();
+    expect(ctx).not.toHaveTextContent("Planned");
+    expect(within(ctx).getByRole("link")).toHaveAttribute(
+      "href",
+      "https://ctx.aserdargun.com",
+    );
   });
 
   it("filters the evidence ledger without changing the contract", async () => {
@@ -74,6 +118,13 @@ describe("EVL application", () => {
     await user.click(screen.getByRole("button", { name: "Reset contract" }));
 
     expect(screen.getByRole("dialog", { name: "Reset this contract?" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(
+      screen.queryByRole("dialog", { name: "Reset this contract?" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reset contract" })).toHaveFocus();
+    await user.click(screen.getByRole("button", { name: "Reset contract" }));
     await user.click(screen.getByRole("button", { name: "Cancel" }));
     expect(claim).toHaveValue("Temporary claim");
     await user.click(screen.getByRole("button", { name: "Reset contract" }));
@@ -90,6 +141,7 @@ describe("EVL application", () => {
     await user.click(screen.getByRole("button", { name: "Export JSON" }));
     expect(createObjectURL).toHaveBeenCalledOnce();
     expect(revokeObjectURL).toHaveBeenCalledOnce();
+    expect(anchorClick).toHaveBeenCalledOnce();
   });
 
   it("renders one page heading and named anchored regions", () => {

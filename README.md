@@ -12,8 +12,8 @@ score.
 - `/tr` — Turkish workbench
 - `/` — permanent redirect to `/en` in Azure Static Web Apps
 
-The initial corpus connects EVL to USL, LLM, the planned CTX product, HNS, SEC,
-WFM, and ENG as a shared verification layer.
+The initial corpus connects EVL to the live USL, LLM, CTX, HNS, SEC, WFM, and
+ENG applications as a shared verification layer.
 
 ## Privacy boundary
 
@@ -44,11 +44,11 @@ checkout before terminating it. It refuses foreign processes.
 
 ## Evidence policy
 
-Bundled sources are primary standards or official technical guidance. Every
-record carries a verification date, evidence tier, supported patterns, and a
-visible limitation. Reference contracts are planning examples, not benchmark
-results. The evidence ledger supports method design; it does not certify a
-model, system, vendor, or release.
+Bundled sources are primary NIST, Anthropic, and OpenAI materials. Every record
+carries a publication date when available, a current verification date, an
+evidence tier, supported patterns, and a visible limitation. Reference
+contracts are planning examples, not benchmark results. The evidence ledger
+supports method design; it does not certify a model, system, vendor, or release.
 
 ## Release contract
 
@@ -58,6 +58,7 @@ official actions and a repository secret named
 `AZURE_STATIC_WEB_APPS_API_TOKEN_SWA_EVL_ASERDARGUN_COM`. Each build publishes a
 `release.json` containing the exact Git commit SHA.
 
-This release intentionally uses only the Azure-generated
-`*.azurestaticapps.net` hostname. No custom domain or DNS record is part of the
-current scope.
+The Azure-generated production hostname is
+`ambitious-sea-06418d303.6.azurestaticapps.net`; the validated public custom
+domain is `evl.aserdargun.com`. Deployment reuses the existing binding and does
+not create or modify DNS records.

@@ -39,6 +39,9 @@ test("mobile render is linear, operable, and overflow free", async ({ page }) =>
     return Boolean(rect && rect.left >= 0 && rect.right <= window.innerWidth);
   });
   expect(focusedIsVisible).toBe(true);
+  await page.getByRole("checkbox", { name: "Safety evidence" }).uncheck();
+  await expect(page.getByText("Critical layer is not covered")).toBeVisible();
+  await expect(page.getByText("Critical Safety layer is missing.")).toBeVisible();
   await page.locator("#patterns").scrollIntoViewIfNeeded();
   await expect(page.locator(".decision-rail")).toHaveClass(/is-sticky/);
   expect(consoleErrors).toEqual([]);

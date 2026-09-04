@@ -12,13 +12,20 @@ export function EvidenceLedger({ locale, filter, onFilter }: Props) {
     const sourcePatterns = patterns.filter((pattern) => source.supportedPatternIds.includes(pattern.id));
     return sourcePatterns.some(({ layerIds }) => layerIds.includes(filter));
   });
+  const formatDate = (value: string) =>
+    new Intl.DateTimeFormat(locale === "tr" ? "tr-TR" : "en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(`${value}T00:00:00.000Z`));
   return (
     <section className="downstream-panel evidence-ledger" id="evidence" aria-labelledby="evidence-heading">
       <div className="section-heading ledger-heading">
         <div><span>{t(locale, "evidence.kicker")}</span><h2 id="evidence-heading">{t(locale, "evidence.heading")}</h2></div>
         <label className="filter-label">
-          <span className="visually-hidden">Filter evidence by layer</span>
-          <select aria-label="Filter evidence by layer" value={filter} onChange={(event) => onFilter(event.target.value as "all" | LayerId)}>
+          <span className="visually-hidden">{t(locale, "evidence.filterLabel")}</span>
+          <select aria-label={t(locale, "evidence.filterLabel")} value={filter} onChange={(event) => onFilter(event.target.value as "all" | LayerId)}>
             <option value="all">{t(locale, "evidence.all")}</option>
             {LAYER_IDS.map((layerId) => <option value={layerId} key={layerId}>{t(locale, `layer.${layerId}` as MessageKey)}</option>)}
           </select>
@@ -30,8 +37,13 @@ export function EvidenceLedger({ locale, filter, onFilter }: Props) {
           <tbody>
             {visibleSources.map((source) => (
               <tr key={source.id}>
-                <td><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a><small>{source.organization} · {source.verifiedAt}</small></td>
-                <td><code>{source.tier.replace("_", " ")}</code></td>
+                <td>
+                  <a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>
+                  <small>{source.organization}</small>
+                  <small>{t(locale, "evidence.verified")} · {formatDate(source.verifiedAt)}</small>
+                  {source.publishedAt && <small>{t(locale, "evidence.published")} · {formatDate(source.publishedAt)}</small>}
+                </td>
+                <td><code>{t(locale, `tier.${source.tier}` as MessageKey)}</code></td>
                 <td>{t(locale, source.limitationKey as MessageKey)}</td>
               </tr>
             ))}
