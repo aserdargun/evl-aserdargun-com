@@ -1,0 +1,10 @@
+# EVL working contract
+
+- Build the AI evaluation and reliability lab, a bilingual, evidence-aware workbench for deterministic release decisions.
+- Keep evaluation truth in `src/domain` and `src/data`; no remote API, database, analytics, telemetry, or hidden global state. Zod schemas under `src/domain/schemas.ts` are the single source of truth.
+- Decision inputs (selected target, contract under edit, evaluation result) stay in the browser. The export envelope is the only artifact that may leave the workbench, and only when the user explicitly exports. Evidence ledger and portfolio map are observer outputs, never decision inputs.
+- Evaluation contract, evaluation result, evidence source, pattern, portfolio app, persisted workbench, and export envelope schema versions are explicit. Update affected versions when semantics change.
+- Every export envelope carries `schemaVersion`, `engineVersion`, and `exportedAt`; sources are filtered to those referenced by the contract. Persisted state under the `evl.workbench.v1` key is rejected as `unsupported` when its `schemaVersion` is not 1, and as `invalid` when the payload fails the schema. Critical-layer findings force the gate to `hold`; the result never collapses to a hidden average.
+- Keep Turkish and English controls and explanations equivalent; the parity test in `src/i18n/catalog-parity.test.ts` enforces this. Label model assumptions and reliability units in both languages.
+- Run `npm run validate` (lint + typecheck + test + stop-preview test + build + artifact verify + artifact contract + e2e + `git diff --check`) and review the diff before handoff. Releases use `release.json` stamped with the Git commit SHA; the deployment secret `AZURE_STATIC_WEB_APPS_API_TOKEN_SWA_EVL_ASERDARGUN_COM` ships the tested `dist` to the Azure-generated `*.azurestaticapps.net` hostname.
+- Local work only unless the user authorizes external publication. Preserve unrelated work and processes. The `nxt`, `stk`, and `inf` projects are private and out of scope.
