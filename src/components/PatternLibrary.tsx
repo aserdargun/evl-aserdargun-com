@@ -17,7 +17,6 @@ export function PatternLibrary({ locale }: { locale: Locale }) {
           <article className="pattern-row" key={pattern.id}>
             <Icon name={icons[index] ?? "document"} />
             <div><h3>{t(locale, pattern.titleKey as MessageKey)}</h3><p>{t(locale, pattern.descriptionKey as MessageKey)}</p></div>
-            <Icon name="chevron" />
           </article>
         ))}
       </div>

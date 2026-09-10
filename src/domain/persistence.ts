@@ -9,11 +9,18 @@ export type LoadWorkbenchResult =
   | { status: "loaded"; state: PersistedWorkbench }
   | { status: "empty" }
   | { status: "unsupported" }
+  | { status: "unavailable" }
   | { status: "invalid" };
 
-export function loadWorkbench(storage: Storage): LoadWorkbenchResult {
+export function loadWorkbench(storage: Storage | undefined): LoadWorkbenchResult {
+  let raw: string | null;
   try {
-    const raw = storage.getItem(STORAGE_KEY);
+    if (!storage) return { status: "unavailable" };
+    raw = storage.getItem(STORAGE_KEY);
+  } catch {
+    return { status: "unavailable" };
+  }
+  try {
     if (raw === null) return { status: "empty" };
     const candidate: unknown = JSON.parse(raw);
     if (
@@ -34,11 +41,12 @@ export function loadWorkbench(storage: Storage): LoadWorkbenchResult {
 }
 
 export function saveWorkbench(
-  storage: Storage,
+  storage: Storage | undefined,
   state: PersistedWorkbench,
 ): boolean {
   try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (!storage || loadWorkbench(storage).status === "unsupported") return false;
+    storage.setItem(STORAGE_KEY, JSON.stringify(persistedWorkbenchSchema.parse(state)));
     return true;
   } catch {
     return false;

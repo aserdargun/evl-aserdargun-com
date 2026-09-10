@@ -39,7 +39,7 @@ describe("workbench persistence", () => {
         throw new Error("blocked");
       },
     } as unknown as Storage;
-    expect(loadWorkbench(failingStorage)).toEqual({ status: "invalid" });
+    expect(loadWorkbench(failingStorage)).toEqual({ status: "unavailable" });
   });
 
   it("clears only EVL workbench state", () => {
@@ -49,4 +49,16 @@ describe("workbench persistence", () => {
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
     expect(localStorage.getItem("other")).toBe("keep");
   });
+});
+
+it("preserves a future storage version when an edit attempts to save", () => {
+  const future = JSON.stringify({ ...state, schemaVersion: 99 });
+  localStorage.setItem(STORAGE_KEY, future);
+  expect(saveWorkbench(localStorage, state)).toBe(false);
+  expect(localStorage.getItem(STORAGE_KEY)).toBe(future);
+});
+
+it("rejects a mismatched target before writing", () => {
+  expect(saveWorkbench(localStorage, { ...state, selectedTargetId: "model" })).toBe(false);
+  expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
 });

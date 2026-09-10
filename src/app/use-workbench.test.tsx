@@ -66,3 +66,26 @@ describe("useWorkbench", () => {
     expect(result.current.persistenceNotice).toBe("saveFailed");
   });
 });
+
+describe("draft recovery", () => {
+  it("retains each target draft across switching and reload, including invalid fields", () => {
+    const { result, unmount } = renderHook(() => useWorkbench("en", { storage: localStorage, now: () => NOW }));
+    act(() => result.current.updateField("claim", ""));
+    act(() => result.current.updateField("trials", null));
+    expect(result.current.canExport).toBe(false);
+    act(() => result.current.selectTarget("agent"));
+    expect(result.current.contract.claim).toBe("");
+    act(() => result.current.selectTarget("model"));
+    act(() => result.current.updateField("claim", "Model draft"));
+    unmount();
+    const restored = renderHook(() => useWorkbench("en", { storage: localStorage, now: () => NOW }));
+    expect(restored.result.current.contract.claim).toBe("Model draft");
+    act(() => restored.result.current.selectTarget("agent"));
+    expect(restored.result.current.contract.claim).toBe("");
+    expect(restored.result.current.contract.trials).toBeNull();
+    expect(restored.result.current.result.gate).toBe("hold");
+    act(() => restored.result.current.reset());
+    act(() => restored.result.current.selectTarget("model"));
+    expect(restored.result.current.contract.claim).toBe("Model draft");
+  });
+});

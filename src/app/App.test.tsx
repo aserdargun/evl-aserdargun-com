@@ -28,7 +28,7 @@ describe("EVL application", () => {
 
     const gate = screen.getByRole("status", { name: "Release gate" });
     expect(gate).toHaveTextContent("READY");
-    await user.click(screen.getByRole("checkbox", { name: "Safety evidence" }));
+    await user.selectOptions(screen.getByRole("combobox", { name: "Safety Coverage" }), "missing");
 
     expect(gate).toHaveTextContent("HOLD");
     expect(screen.getByText("Critical layer is not covered")).toBeVisible();
@@ -75,8 +75,8 @@ describe("EVL application", () => {
     const user = userEvent.setup();
     render(<App initialPath="/tr" />);
 
-    await user.click(
-      screen.getByRole("checkbox", { name: "Güvenlik kanıtı" }),
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Güvenlik Kapsam" }), "missing",
     );
 
     expect(screen.getByText("Kritik Güvenlik katmanı eksik.")).toBeVisible();

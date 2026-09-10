@@ -1,9 +1,12 @@
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { defineConfig } from "@playwright/test";
 
 const externalBaseUrl = process.env.BASE_URL;
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  outputDir: join(tmpdir(), "evl-playwright-results"),
   fullyParallel: false,
   workers: 1,
   retries: process.env.CI ? 1 : 0,

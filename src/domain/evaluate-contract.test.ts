@@ -269,3 +269,35 @@ describe("evaluateContract", () => {
     ).toThrow("Invalid evaluation timestamp");
   });
 });
+
+describe("invalid and unsupported evaluation claims", () => {
+  it.each([
+    { claim: "   " }, { subject: "" }, { subjectVersion: "" },
+    { taskSet: "" }, { reviewDate: "" }, { trials: 0 }, { trials: 2.5 },
+  ])("fails closed on incomplete fields: %j", (edit) => {
+    const result = evaluateContract({ ...readyFixture(), ...edit }, agentTarget, sources, NOW);
+    expect(result.gate).toBe("hold");
+    expect(result.findings.map(({ code }) => code)).toContain("invalid-contract");
+  });
+
+  it.each([-0.1, 1.1])("rejects a ratio threshold of %s", (value) => {
+    const contract = readyFixture();
+    contract.threshold.value = value;
+    expect(evaluateContract(contract, agentTarget, sources, NOW).gate).toBe("hold");
+  });
+
+  it("does not accept covered layers with no referenced evidence", () => {
+    const contract = readyFixture();
+    contract.layers.safety.evidenceSourceIds = [];
+    expect(evaluateContract(contract, agentTarget, sources, NOW).findings.map(({ code }) => code)).toContain("covered-without-evidence");
+  });
+
+  it("does not use a noncritical grader to bypass critical model-only safety", () => {
+    const contract = readyFixture();
+    contract.graders = [
+      { id: "judge", family: "model", label: "Judge", critical: true },
+      { id: "format", family: "rule", label: "Format", critical: false },
+    ];
+    expect(evaluateContract(contract, agentTarget, sources, NOW).gate).toBe("hold");
+  });
+});

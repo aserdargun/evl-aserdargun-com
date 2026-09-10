@@ -3,16 +3,18 @@ import type { Locale, MessageKey } from "../i18n";
 import { formatMessage, t } from "../i18n";
 import { Icon } from "./icons";
 
-type Props = { locale: Locale; result: EvaluationResult; sticky: boolean; onExport: () => void; onReset: () => void };
+type Props = { locale: Locale; result: EvaluationResult; canExport: boolean; exportError: boolean; onExport: () => void; onReset: () => void };
 
-export function DecisionGate({ locale, result, sticky, onExport, onReset }: Props) {
+export function DecisionGate({ locale, result, canExport, exportError, onExport, onReset }: Props) {
   return (
-    <aside className={`decision-rail gate-${result.gate}${sticky ? " is-sticky" : ""}`} aria-labelledby="gate-heading">
+    <aside className={`decision-rail gate-${result.gate}`} aria-labelledby="gate-heading">
       <h2 id="gate-heading">{t(locale, "gate.heading")}</h2>
+      <p className="gate-scope">{t(locale, "gate.scope")}</p>
       <div className="gate-box" role="status" aria-label={t(locale, "gate.heading")} aria-live="polite" aria-atomic="true">
         <div className="gate-value"><Icon name={result.gate === "hold" ? "warning" : "check"} /><strong>{t(locale, `gate.${result.gate}` as MessageKey)}</strong></div>
         <p>{t(locale, `gate.${result.gate}.description` as MessageKey)}</p>
       </div>
+      <p className="gate-boundary">{t(locale, "gate.boundary")}</p>
       <div className="finding-list">
         <h3>{result.gate === "ready" ? (locale === "en" ? "Why it is ready" : "Neden hazır") : (locale === "en" ? "Decision trail" : "Karar izi")}</h3>
         {result.findings.length === 0 ? (
@@ -40,8 +42,10 @@ export function DecisionGate({ locale, result, sticky, onExport, onReset }: Prop
           );
         })}
       </div>
+      {!canExport && <p id="export-help" className="field-error">{t(locale, "gate.exportBlocked")}</p>}
+      {exportError && <p role="alert">{t(locale, "gate.exportFailed")}</p>}
       <div className="gate-actions">
-        <button className="primary-action" type="button" onClick={onExport}><Icon name="download" />{t(locale, "actions.export")}</button>
+        <button className="primary-action" type="button" disabled={!canExport} aria-describedby={!canExport ? "export-help" : undefined} onClick={onExport}><Icon name="download" />{t(locale, "actions.export")}</button>
         <button type="button" onClick={onReset}><Icon name="reset" />{t(locale, "actions.reset")}</button>
       </div>
     </aside>

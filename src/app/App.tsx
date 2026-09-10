@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
+import { evaluateContract } from "../domain/evaluate-contract";
 import { evidenceSources } from "../data/evidence";
 import { buildExportEnvelope, downloadExport } from "../domain/export-contract";
-import type { LayerId } from "../domain/schemas";
+import { parseContract, type LayerId } from "../domain/schemas";
 import { localeFromPath, t, type Locale } from "../i18n";
 import { ContractEditor } from "../components/ContractEditor";
 import { CoverageMatrix } from "../components/CoverageMatrix";
@@ -18,8 +19,8 @@ import { useWorkbench } from "./use-workbench";
 export function App({ initialPath }: { initialPath?: string }) {
   const [locale, setLocale] = useState<Locale>(() => localeFromPath(initialPath ?? window.location.pathname));
   const [evidenceFilter, setEvidenceFilter] = useState<"all" | LayerId>("all");
+  const [exportError, setExportError] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
-  const [stickyGate, setStickyGate] = useState(false);
   const cancelResetRef = useRef<HTMLButtonElement>(null);
   const resetReturnFocusRef = useRef<HTMLElement | null>(null);
   const workbench = useWorkbench(locale);
@@ -46,23 +47,15 @@ export function App({ initialPath }: { initialPath?: string }) {
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  useEffect(() => {
-    const updateStickyGate = () => {
-      const contractHeading = document.getElementById("contract-heading");
-      setStickyGate(window.innerWidth < 760 && Boolean(contractHeading && contractHeading.getBoundingClientRect().bottom < 0));
-    };
-    updateStickyGate();
-    window.addEventListener("scroll", updateStickyGate, { passive: true });
-    window.addEventListener("resize", updateStickyGate);
-    return () => {
-      window.removeEventListener("scroll", updateStickyGate);
-      window.removeEventListener("resize", updateStickyGate);
-    };
-  }, []);
-
   const exportEvidence = () => {
-    const envelope = buildExportEnvelope(workbench.contract, workbench.result, evidenceSources, new Date().toISOString());
-    downloadExport(envelope, document);
+    if (!workbench.canExport) return;
+    try {
+      const timestamp = new Date().toISOString();
+      const result = evaluateContract(workbench.contract, workbench.target, evidenceSources, timestamp);
+      const envelope = buildExportEnvelope(parseContract(workbench.contract), result, evidenceSources, timestamp);
+      downloadExport(envelope, document);
+      setExportError(false);
+    } catch { setExportError(true); }
   };
 
   const openReset = () => {
@@ -74,16 +67,18 @@ export function App({ initialPath }: { initialPath?: string }) {
 
   return (
     <div className="app-shell">
+      <div inert={resetOpen}>
+      <a className="skip-link" href="#workbench">{t(locale, "nav.skip")}</a>
       <Header locale={locale} onLocaleChange={setLocale} />
       {workbench.persistenceNotice && <p className="persistence-alert" role="alert">{t(locale, `persistence.${workbench.persistenceNotice}`)}</p>}
       <main>
-        <section className="workbench-layout" id="workbench" aria-label={t(locale, "nav.workbench")}>
+        <section className="workbench-layout" id="workbench" tabIndex={-1} aria-label={t(locale, "nav.workbench")}>
           <TargetRail locale={locale} selected={workbench.selectedTargetId} onSelect={workbench.selectTarget} />
           <div className="workspace-column">
-            <ContractEditor locale={locale} contract={workbench.contract} onChange={workbench.updateField} />
+            <ContractEditor key={workbench.contract.targetId} locale={locale} contract={workbench.contract} onChange={workbench.updateField} />
             <CoverageMatrix locale={locale} contract={workbench.contract} target={workbench.target} onChange={workbench.updateLayer} />
           </div>
-          <DecisionGate locale={locale} result={workbench.result} sticky={stickyGate} onExport={exportEvidence} onReset={openReset} />
+          <DecisionGate locale={locale} result={workbench.result} canExport={workbench.canExport} exportError={exportError} onExport={exportEvidence} onReset={openReset} />
         </section>
         <div className="downstream-layout">
           <PatternLibrary locale={locale} />
@@ -92,6 +87,7 @@ export function App({ initialPath }: { initialPath?: string }) {
         </div>
       </main>
       <PrivacyNote locale={locale} />
+      </div>
       {resetOpen && (
         <div className="modal-backdrop" role="presentation">
           <section

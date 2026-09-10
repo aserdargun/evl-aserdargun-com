@@ -1,18 +1,19 @@
 import {
+  evaluationContractSchema,
   LAYER_IDS,
   parseResult,
+  type ContractDraft,
   type EvidenceSource,
-  type EvaluationContract,
   type EvaluationResult,
   type EvaluationTarget,
   type Finding,
   type LayerId,
 } from "./schemas";
 
-export const ENGINE_VERSION = "1.0.0";
+export const ENGINE_VERSION = "1.1.0";
 
 type RuleContext = Readonly<{
-  contract: EvaluationContract;
+  contract: ContractDraft;
   target: EvaluationTarget;
   sources: readonly EvidenceSource[];
   sourceIds: ReadonlySet<string>;
@@ -49,12 +50,17 @@ function dateOnly(value: string): Date {
   return new Date(`${value}T00:00:00.000Z`);
 }
 
-function referencedSourceIds(contract: EvaluationContract): string[] {
+function referencedSourceIds(contract: ContractDraft): string[] {
   return [
     ...contract.evidenceSourceIds,
     ...LAYER_IDS.flatMap((layerId) => contract.layers[layerId].evidenceSourceIds),
   ];
 }
+
+const uncoveredEvidenceRule: EvaluationRule = ({ contract }) =>
+  LAYER_IDS.flatMap((id) => contract.layers[id].status === "covered" &&
+    contract.layers[id].evidenceSourceIds.length === 0
+    ? [finding("covered-without-evidence", "blocker", `Covered layer ${id} has no evidence references.`, id)] : []);
 
 const targetMismatchRule: EvaluationRule = ({ contract, target }) =>
   contract.targetId === target.id
@@ -163,7 +169,7 @@ const criticalLayerRule: EvaluationRule = ({ contract, target }) =>
 const modelOnlyCriticalSafetyRule: EvaluationRule = ({ contract, target }) => {
   if (!target.criticalLayers.includes("safety")) return [];
   const hasNonModelGrader = contract.graders.some(
-    ({ family }) => family !== "model",
+    ({ family, critical }) => critical && family !== "model",
   );
   return hasNonModelGrader
     ? []
@@ -215,6 +221,7 @@ const reviewDueSoonRule: EvaluationRule = ({ contract, evaluatedAt }) => {
 };
 
 const rules: readonly EvaluationRule[] = [
+  uncoveredEvidenceRule,
   targetMismatchRule,
   invalidEvidenceReferenceRule,
   staleEvidenceRule,
@@ -228,7 +235,7 @@ const rules: readonly EvaluationRule[] = [
 ];
 
 export function evaluateContract(
-  contract: EvaluationContract,
+  draft: ContractDraft,
   target: EvaluationTarget,
   sources: readonly EvidenceSource[],
   evaluatedAt: string,
@@ -237,6 +244,24 @@ export function evaluateContract(
   if (Number.isNaN(evaluatedDate.getTime())) {
     throw new Error("Invalid evaluation timestamp");
   }
+
+  const parsed = evaluationContractSchema.safeParse(draft);
+  if (!parsed.success) {
+    return parseResult({
+      engineVersion: ENGINE_VERSION,
+      evaluatedAt: evaluatedDate.toISOString(),
+      gate: "hold",
+      findings: [finding("invalid-contract", "blocker", `Invalid fields: ${[...new Set(parsed.error.issues.map((issue) => issue.path.join(".")))].join(", ")}.`),
+        ...(draft.criticalFailures.length === 0 ? [finding("critical-failures-undefined", "blocker", "Define a release-blocking failure.")] : [])],
+      layerAssessments: LAYER_IDS.map((layerId) => ({
+        layerId,
+        status: draft.layers[layerId].status,
+        critical: target.criticalLayers.includes(layerId),
+        rationale: draft.layers[layerId].rationale,
+      })),
+    });
+  }
+  const contract = parsed.data;
 
   const context: RuleContext = {
     contract,

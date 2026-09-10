@@ -5,7 +5,7 @@ test("English agent contract changes from ready to hold and exports", async ({ p
   await page.getByRole("button", { name: "Agent & tool use" }).click();
   await expect(page.getByRole("status", { name: "Release gate" })).toContainText("READY");
 
-  await page.getByRole("checkbox", { name: "Safety evidence" }).uncheck();
+  await page.getByRole("combobox", { name: "Safety Coverage" }).selectOption("missing");
   await expect(page.getByRole("status", { name: "Release gate" })).toContainText("HOLD");
   await expect(page.getByText("Critical layer is not covered")).toBeVisible();
 
@@ -26,6 +26,6 @@ test("edited claim survives English to Turkish routing", async ({ page }) => {
 
 test("Turkish safety failure closes the release gate", async ({ page }) => {
   await page.goto("/tr");
-  await page.getByRole("checkbox", { name: "Güvenlik kanıtı" }).uncheck();
+  await page.getByRole("combobox", { name: "Güvenlik Kapsam" }).selectOption("missing");
   await expect(page.getByRole("status", { name: "Yayın kapısı" })).toContainText("BEKLET");
 });

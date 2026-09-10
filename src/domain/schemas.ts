@@ -97,6 +97,10 @@ export const evaluationContractSchema = z.object({
     operator: z.enum([">=", "<=", ">", "<", "="]),
     value: z.number().finite(),
     unit: nonEmptyText,
+  }).superRefine((threshold, context) => {
+    if (threshold.unit === "ratio" && (threshold.value < 0 || threshold.value > 1)) {
+      context.addIssue({ code: "custom", path: ["value"], message: "A ratio must be between 0 and 1." });
+    }
   }),
   trials: z.number().int().min(3),
   samplingRationale: nonEmptyText,
@@ -189,16 +193,36 @@ export const evaluationResultSchema = z
     }
   });
 
+// Drafts retain incomplete edits; the strict contract schema gates evaluation/export.
+export const draftContractSchema = evaluationContractSchema.extend({
+  subject: z.string(), subjectVersion: z.string(), claim: z.string(),
+  taskSet: z.string(), population: z.string(), successCriteria: z.string(),
+  samplingRationale: z.string(), arbitrationRule: z.string(), reviewDate: z.string(),
+  trials: z.number().nullable(), criticalFailures: z.array(z.string()),
+  environmentAssumptions: z.array(z.string()),
+  threshold: z.object({
+    metric: slug, operator: z.enum([">=", "<=", ">", "<", "="]),
+    value: z.number().nullable(), unit: nonEmptyText,
+  }),
+});
+
 export const persistedWorkbenchSchema = z.object({
   schemaVersion: z.literal(1),
   selectedTargetId: targetIdSchema,
-  contract: evaluationContractSchema,
+  contract: draftContractSchema,
+  drafts: z.partialRecord(targetIdSchema, draftContractSchema).optional(),
+}).superRefine((state, context) => {
+  if (state.selectedTargetId !== state.contract.targetId ||
+      Object.entries(state.drafts ?? {}).some(([id, contract]) => id !== contract.targetId)) {
+    context.addIssue({ code: "custom", message: "Draft target does not match its key." });
+  }
 });
 
 export const exportEnvelopeSchema = z.object({
   schemaVersion: z.literal(1),
   engineVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
   exportedAt: isoDateTime,
+  assessmentScope: z.literal("contract-planning-only").default("contract-planning-only"),
   contract: evaluationContractSchema,
   result: evaluationResultSchema,
   sources: z.array(evidenceSourceSchema),
@@ -212,6 +236,7 @@ export type EvidenceTier = (typeof EVIDENCE_TIERS)[number];
 export type TargetId = (typeof TARGET_IDS)[number];
 export type LayerEvidence = z.infer<typeof layerEvidenceSchema>;
 export type Grader = z.infer<typeof graderSchema>;
+export type ContractDraft = z.infer<typeof draftContractSchema>;
 export type EvaluationContract = z.infer<typeof evaluationContractSchema>;
 export type EvaluationTarget = z.infer<typeof evaluationTargetSchema>;
 export type EvidenceSource = z.infer<typeof evidenceSourceSchema>;

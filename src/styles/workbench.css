@@ -30,7 +30,7 @@
 .section-heading > span, .section-heading > div > span { display: block; margin-bottom: 3px; color: var(--cyan-dim); font: 500 11px/16px var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
 .section-heading h2 { margin: 0; font-size: 18px; line-height: 24px; font-weight: 500; }
 .contract-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(150px, .85fr) minmax(130px, .72fr); gap: 14px 16px; }
-.field { display: grid; gap: 6px; min-width: 0; color: var(--text-2); font-size: 12px; line-height: 16px; }
+.field { display: grid; align-content: start; gap: 6px; min-width: 0; color: var(--text-2); font-size: 12px; line-height: 16px; }
 .field-claim { grid-column: 1 / -1; }
 .field-subject, .field-taskset, .field-critical { grid-column: span 2; }
 .field input, .field select, .field textarea, .threshold-control, .filter-label select, .target-select-wrap select { min-width: 0; width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--hairline); border-radius: 4px; background: var(--control); color: var(--text); font-size: 14px; line-height: 20px; }
@@ -86,7 +86,7 @@
 .downstream-panel { min-width: 0; padding: 20px 24px 24px; border-right: 1px solid var(--hairline); scroll-margin-top: 70px; }
 .downstream-panel:last-child { border-right: 0; }
 .pattern-rows, .evidence-table-wrap { border: 1px solid var(--hairline); }
-.pattern-row { display: grid; grid-template-columns: 22px minmax(0, 1fr) 16px; align-items: center; gap: 12px; min-height: 48px; padding: 7px 10px; border-bottom: 1px solid var(--hairline); }
+.pattern-row { display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: center; gap: 12px; min-height: 48px; padding: 7px 10px; border-bottom: 1px solid var(--hairline); }
 .pattern-row:last-child { border-bottom: 0; }.pattern-row > svg:first-child { color: var(--cyan); }.pattern-row svg { width: 20px; }
 .pattern-row h3 { margin: 0; font-size: 13px; font-weight: 500; }.pattern-row p { margin: 1px 0 0; color: var(--quiet); font-size: 11px; line-height: 15px; }
 .ledger-heading { display: flex; align-items: end; justify-content: space-between; gap: 10px; }
@@ -124,7 +124,7 @@
   .primary-nav { gap: 0; padding: 0 8px; }.primary-nav a { flex: 1 1 auto; min-width: 0; min-height: 44px; padding: 0 8px; white-space: nowrap; }
   .workbench-layout { display: flex; flex-direction: column; min-height: 0; }
   .target-rail { order: 0; padding: 14px 15px 0; border-bottom: 0; }.target-rail h2 { font-size: 12px; color: var(--text-2); }.target-list { display: none; }.target-select-wrap { display: block; }.target-select-wrap select { height: 48px; border-color: var(--cyan); color: var(--cyan); }
-  .workspace-column { display: contents; }.contract-editor { order: 1; padding: 15px; }.coverage-section { order: 2; padding: 0 15px 10px; margin: 0; }.decision-rail { order: 3; border-left: 0; border-top: 1px solid var(--hairline); padding: 14px 15px 16px; background: var(--raised); }.decision-rail.is-sticky { position: sticky; z-index: 4; bottom: 0; }
+  .workspace-column { display: contents; }.contract-editor { order: 1; padding: 15px; }.coverage-section { order: 2; padding: 0 15px 10px; margin: 0; }.decision-rail { order: 3; border-left: 0; border-top: 1px solid var(--hairline); padding: 14px 15px 16px; background: var(--raised); }
   .section-heading > span { display: none; }.section-heading h2 { font-size: 18px; }.contract-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px 10px; }.field { grid-column: span 1; }.field-claim, .field-subject, .field-taskset, .field-critical, .field-review { grid-column: 1 / -1; }.field input, .field select, .threshold-control { height: 48px; }.field textarea { min-height: 72px; }.threshold-control input { height: 46px; }.example-notice { line-height: 16px; }
   .inline-heading { margin-top: 1px; }.coverage-matrix { grid-template-columns: 1fr; }.coverage-cell { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; justify-items: start; align-items: center; min-height: 56px; padding: 8px 12px; gap: 10px; border-right: 0; border-bottom: 1px solid var(--hairline); }.coverage-cell:last-child { border-bottom: 0; }.coverage-name { display: flex; flex-direction: row; gap: 10px; font-family: var(--font-sans); font-size: 12px; text-transform: none; }.coverage-name svg { width: 22px; height: 22px; }.coverage-state { font-size: 12px; }.coverage-critical { font-size: 9px; }.coverage-scale { display: none; }
   .decision-rail > h2 { margin-bottom: 9px; font-size: 13px; }.gate-box { padding: 9px 12px; }.gate-value svg { width: 32px; height: 32px; }.gate-value strong { font-size: 28px; line-height: 34px; }.gate-box p { margin: -2px 0 0 46px; font-size: 11px; }.finding-list { margin-top: 10px; }.finding-list h3 { padding: 10px 0 5px; font-size: 12px; }.finding { padding: 6px 0; font-size: 11px; }.finding small { line-height: 14px; }.gate-actions { grid-template-columns: 1fr 1fr; margin-top: 9px; }.gate-actions button { min-height: 44px; font-size: 12px; }
@@ -136,4 +136,51 @@
 
 @media (max-width: 380px) {
   .locale-control > svg { display: none; }.brand-lockup h1 { max-width: 116px; font-size: 12px; }.gate-actions { grid-template-columns: 1fr; }
+}
+
+/* Keep controls readable at intermediate widths and with long localized labels. */
+.brand-lockup h1 { white-space: normal; }
+.gate-value { min-width: 0; gap: 10px; }
+.gate-value svg { flex-shrink: 0; width: 34px; }
+.gate-value strong { font-size: clamp(20px, 2.1vw, 30px); overflow-wrap: anywhere; }
+.gate-box p { margin-left: 0; }
+.gate-scope { color: var(--cyan); font: 500 11px/1.6 var(--font-mono); }
+.gate-boundary { color: var(--text-2); font-size: 12px; line-height: 1.6; }
+.field .field-error, .field-error { color: var(--red); font-size: 12px; }
+.field [aria-invalid="true"] { border-color: var(--red); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.advanced-contract { margin: 18px 0 12px; border-block: 1px solid var(--hairline); }
+.advanced-contract summary { cursor: pointer; min-height: 44px; padding: 12px 0; color: var(--text-2); }
+.advanced-contract .contract-grid { padding-bottom: 16px; }
+.uncertainty-control { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 13px; }
+.uncertainty-control input { width: 20px; height: 20px; accent-color: var(--cyan); }
+.coverage-help { margin-bottom: 12px; }
+.coverage-matrix { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.coverage-cell { cursor: default; border-bottom: 1px solid var(--hairline); }
+.coverage-cell:nth-child(3n) { border-right: 0; }
+.coverage-cell:nth-last-child(-n+3) { border-bottom: 0; }
+.coverage-cell select { width: 100%; min-width: 0; min-height: 44px; padding: 6px; color: var(--text); border: 1px solid var(--strong); border-radius: 4px; background: var(--control); font-size: 12px; }
+.coverage-cell:focus-within { outline: 2px solid var(--cyan); outline-offset: -2px; }
+.coverage-name { overflow-wrap: anywhere; }
+.coverage-not_applicable .coverage-name svg { color: var(--quiet); }
+.coverage-not_applicable .coverage-scale { opacity: .3; }
+.filter-label select { min-height: 44px; }
+.skip-link { position: fixed; z-index: 20; top: 8px; left: 8px; padding: 12px; background: var(--raised); color: var(--cyan); transform: translateY(-160%); }
+.skip-link:focus { transform: none; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+@media (min-width: 760px) and (max-width: 1279px) {
+  .contract-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .field-review { grid-column: 1 / -1; }
+  .brand-lockup h1 { font-size: 16px; line-height: 1.3; }
+}
+@media (max-width: 759px) {
+  .coverage-matrix { grid-template-columns: 1fr; }
+  .coverage-cell { grid-template-columns: minmax(0, 1fr) minmax(105px, 125px); }
+  .coverage-cell:nth-last-child(-n+3) { border-bottom: 1px solid var(--hairline); }
+  .coverage-cell:last-child { border-bottom: 0; }
+  .coverage-critical { grid-column: 1; grid-row: 2; }
+  .coverage-cell select { grid-column: 2; grid-row: 1 / 3; }
+  .field input, .field textarea, .field select { font-size: 16px; }
+  .pattern-row p { display: block; }
+  .gate-value strong { font-size: 28px; }
 }
