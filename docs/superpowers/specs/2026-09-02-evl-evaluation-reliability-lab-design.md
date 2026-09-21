@@ -2,7 +2,14 @@
 
 Date: 2026-09-02
 
-Status: Approved design specification
+Status: Original approved design specification; see the current README and
+`docs/design/evl-design-inventory.md` for shipped behavior.
+
+2026-09-21 clarification: EVL checks declared evaluation plans; it does not
+execute benchmarks or certify releases. The portfolio map now contains 22
+related public resources grouped into seven evaluation areas. These are learning
+links, not runtime integrations. CTX is a public resource, so the original
+planned-CTX assumption below is superseded.
 
 ## 1. Product definition
 

@@ -1,6 +1,14 @@
 # EVL Fidelity Ledger
 
-## Evidence set
+## Scope of this record
+
+This ledger records the original design comparison. Its screenshots and sign-off
+are historical, not evidence for the 2026-09-21 content revision. The current
+implementation uses a static mobile gate, a two-column patterns/evidence band,
+and a full-width map of 22 related resources in seven topic groups. The current
+content contract is recorded in `evl-design-inventory.md` and `README.md`.
+
+## Original evidence set
 
 | Role | File | Native size | Capture method |
 | --- | --- | --- | --- |
@@ -28,7 +36,7 @@ browser warning/error log.
 | Icon treatment | Consistent 24-unit outline set | Code-native SVG, `currentColor`, 1.65px round strokes | Matched; no raster UI icons ship. |
 | Gate states | Cyan ready, amber conditional, red hold | All three use identical anatomy and deterministic engine output | Matched. The shipped ready example marks all six layers covered so the visible state never contradicts the gate. |
 | Mobile transformation | Linear target, contract, coverage, gate flow | One-column flow, two-column field pairs, six linear coverage rows | Matched structurally. The header navigation remains a keyboard-accessible horizontal rail as required by the responsive contract. |
-| Mobile reachability | Compact concept shows coverage and gate within 844px | Controls remain at least 44px; coverage follows below the initial fold and the gate becomes sticky when reached | Intentional deviation: minimum target size and readable planning data take precedence over compressing controls to the concept's smaller geometry. |
+| Mobile reachability | Compact concept shows coverage and gate within 844px | Controls remain at least 44px; coverage follows below the initial fold and the gate remains in the document flow | Intentional deviation: minimum target size and readable planning data take precedence over compressing controls to the concept's smaller geometry. |
 | Motion | Only restrained state changes | Color and border transitions only; reduced-motion removes duration and smooth scrolling | Matched. |
 | Core interaction | Choose target, change evidence, inspect gate, export, reset | Covered by component and browser tests in both locales | Matched. Reset requires an in-app confirmation. |
 | Overflow and focus | No document-level horizontal scroll; visible control focus | 1440×1100 and 390×844 both report equal client and scroll widths; focused claim remains in-view | Matched. The mobile nav owns its horizontal scrolling and hides its scrollbar. |

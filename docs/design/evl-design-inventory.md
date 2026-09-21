@@ -8,7 +8,16 @@
 The concepts are layout and design-system references. All application text,
 controls, icons, tables, state, and interaction remain code-native.
 
-## Allowed first-viewport copy
+## Current content contract (2026-09-21)
+
+The bilingual catalogs in `src/i18n` define shipped copy. READY/HAZIR means
+contract-planning checks passed, never that measured release conditions passed.
+The lower regions now show patterns and evidence side by side, followed by a
+full-width portfolio map with 22 resources grouped into seven evaluation areas.
+Source review dates and method scope remain visible. The historical concept
+copy below is a visual reference, not a claim or acceptance requirement.
+
+## Historical first-viewport concept copy
 
 English:
 
@@ -164,17 +173,18 @@ font defaults.
   fields occupy two columns; compact fields occupy one.
 - Form controls: 40px desktop / 48px mobile minimum height, square technical
   outline, dark fill, cyan focus ring.
-- Coverage: six equal desktop columns inside one shared matrix border; on mobile,
+- Coverage: three desktop columns in two rows inside one shared matrix border; on mobile,
   six 56px labeled rows inside one shared border.
 - Gate: one strong cyan outline for `Ready`; amber and red variants retain the
   same anatomy. Findings are open rows separated by hairlines.
-- Downstream desktop band: three unequal regions—patterns, evidence, system map.
-  These are divided by shared full-height hairlines, not individual cards.
-- Pattern entries: table-like open rows with one leading icon and one disclosure
-  arrow; read-only in the first release.
+- Downstream desktop band: patterns and evidence in two regions, then a full-width
+  system map. Shared hairlines separate regions.
+- Pattern entries: table-like open rows with one leading icon and visible
+  explanations in both desktop and mobile layouts; read-only.
 - Evidence ledger: compact semantic table with source status and verified date.
-- System map: one horizontal connection line and seven nodes on desktop; a
-  vertical ordered relationship list on mobile.
+- System map: seven topic groups with 22 related public resources. No connecting
+  line or checkmark implies runtime integration or passed evaluation. Each resource
+  opens separately, without the contract. The root-system link follows the locale.
 - Privacy note: low-emphasis full-width footer row after the system map.
 
 ## Icon inventory

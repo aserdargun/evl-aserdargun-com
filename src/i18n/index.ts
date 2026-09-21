@@ -30,4 +30,9 @@ export function pathForLocale(locale: Locale): string {
   return `/${locale}`;
 }
 
+export function metricLabel(locale: Locale, metric: string): string {
+  const key = `metric.${metric}`;
+  return Object.hasOwn(messages[locale], key) ? t(locale, key as MessageKey) : metric;
+}
+
 export type { MessageKey };

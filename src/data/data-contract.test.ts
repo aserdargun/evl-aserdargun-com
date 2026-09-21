@@ -75,7 +75,7 @@ describe("bundled EVL data", () => {
   it("ships current primary evidence metadata", () => {
     expect(
       evidenceSources.find(({ id }) => id === "anthropic-agent-evals"),
-    ).toMatchObject({ publishedAt: "2026-01-09", verifiedAt: "2026-09-10" });
+    ).toMatchObject({ publishedAt: "2026-01-09", verifiedAt: "2026-09-21" });
     expect(
       evidenceSources.find(({ id }) => id === "openai-graders")?.url,
     ).toBe("https://developers.openai.com/api/docs/guides/graders");
@@ -85,8 +85,8 @@ describe("bundled EVL data", () => {
     expect(
       evidenceSources.find(({ id }) => id === "nist-tevv-athlon"),
     ).toMatchObject({
-      publishedAt: "2026-08-04",
-      verifiedAt: "2026-09-10",
+      publishedAt: "2026-08-07",
+      verifiedAt: "2026-09-21",
       tier: "official_guidance",
     });
   });

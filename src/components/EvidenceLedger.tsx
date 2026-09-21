@@ -31,6 +31,7 @@ export function EvidenceLedger({ locale, filter, onFilter }: Props) {
           </select>
         </label>
       </div>
+      <p className="observer-note">{t(locale, "evidence.boundary")}</p>
       <div className="evidence-table-wrap">
         <table>
           <thead><tr><th>{t(locale, "evidence.source")}</th><th>{t(locale, "evidence.tier")}</th><th>{t(locale, "evidence.limitation")}</th></tr></thead>
@@ -40,6 +41,7 @@ export function EvidenceLedger({ locale, filter, onFilter }: Props) {
                 <td>
                   <a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>
                   <small>{source.organization}</small>
+                  <small>{t(locale, "evidence.scope")} · {patterns.filter((pattern) => source.supportedPatternIds.includes(pattern.id)).map((pattern) => t(locale, pattern.titleKey as MessageKey)).join(" · ")}</small>
                   <small>{t(locale, "evidence.verified")} · {formatDate(source.verifiedAt)}</small>
                   {source.publishedAt && <small>{t(locale, "evidence.published")} · {formatDate(source.publishedAt)}</small>}
                 </td>

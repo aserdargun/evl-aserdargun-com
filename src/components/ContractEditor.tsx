@@ -1,6 +1,6 @@
 import { evaluationContractSchema, type ContractDraft } from "../domain/schemas";
 import type { Locale, MessageKey } from "../i18n";
-import { t } from "../i18n";
+import { metricLabel, t } from "../i18n";
 
 type Props = {
   locale: Locale;
@@ -68,7 +68,7 @@ export function ContractEditor({ locale, contract, onChange }: Props) {
               onChange={(event) => onChange("threshold", { ...contract.threshold, value: event.target.value === "" ? null : event.target.valueAsNumber })}
             />
           </div>
-          <small id="threshold-help">{contract.threshold.unit === "ratio" ? t(locale, "contract.thresholdHelp") : contract.threshold.unit}</small>
+          <small id="threshold-help">{t(locale, "contract.metric")}: {metricLabel(locale, contract.threshold.metric)}. {contract.threshold.unit === "ratio" ? t(locale, "contract.thresholdHelp") : contract.threshold.unit}</small>
           {error("threshold")}
         </label>
         <label className="field">

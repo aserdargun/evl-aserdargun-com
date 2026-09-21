@@ -5,7 +5,7 @@ import {
   type LayerId,
   type TargetId,
 } from "../domain/schemas";
-import type { Locale } from "../i18n";
+import { metricLabel, type Locale } from "../i18n";
 
 type TargetConfig = {
   unit: EvaluationContract["unit"];
@@ -229,8 +229,8 @@ function makeContract(targetId: TargetId, locale: Locale): EvaluationContract {
     population: copy.population,
     successCriteria:
       locale === "en"
-        ? `Meet the ${config.metric} threshold with no critical failures; planning example only, not a benchmark result.`
-        : `${config.metric} eşiğini kritik hata olmadan karşıla; bu yalnızca bir planlama örneğidir, kıyaslama sonucu değildir.`,
+        ? `Meet the ${metricLabel(locale, config.metric).toLocaleLowerCase("en-GB")} threshold with no critical failures; planning example only, not a benchmark result.`
+        : `${metricLabel(locale, config.metric)} eşiğini kritik hata olmadan karşıla; bu yalnızca bir planlama örneğidir, kıyaslama sonucu değildir.`,
     threshold: {
       metric: config.metric,
       operator: ">=",

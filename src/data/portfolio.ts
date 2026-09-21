@@ -1,11 +1,23 @@
-import { portfolioAppSchema } from "../domain/schemas";
+import { portfolioAppSchema, type TargetId } from "../domain/schemas";
 
-export const portfolioApps = [
-  { code: "usl", labelKey: "portfolio.usl", roleKey: "portfolio.usl.role", status: "active", url: "https://usl.aserdargun.com" },
-  { code: "llm", labelKey: "portfolio.llm", roleKey: "portfolio.llm.role", status: "active", url: "https://llm.aserdargun.com" },
-  { code: "ctx", labelKey: "portfolio.ctx", roleKey: "portfolio.ctx.role", status: "active", url: "https://ctx.aserdargun.com" },
-  { code: "hns", labelKey: "portfolio.hns", roleKey: "portfolio.hns.role", status: "active", url: "https://hns.aserdargun.com" },
-  { code: "sec", labelKey: "portfolio.sec", roleKey: "portfolio.sec.role", status: "active", url: "https://sec.aserdargun.com" },
-  { code: "wfm", labelKey: "portfolio.wfm", roleKey: "portfolio.wfm.role", status: "active", url: "https://wfm.aserdargun.com" },
-  { code: "eng", labelKey: "portfolio.eng", roleKey: "portfolio.eng.role", status: "active", url: "https://eng.aserdargun.com" },
-].map((app) => portfolioAppSchema.parse(app));
+// Curated from the public aserdargun-com registry on 2026-09-21.
+// These are learning relationships, never evaluation inputs or runtime integrations.
+export const portfolioGroups = [
+  { targetId: "model", codes: ["usl", "adp"] },
+  { targetId: "inference", codes: ["llm", "tfl", "lcl", "cld", "dcl"] },
+  { targetId: "retrieval", codes: ["ctx", "mem"] },
+  { targetId: "agent", codes: ["hns", "arl", "dpl", "cul", "aos"] },
+  { targetId: "security", codes: ["sec"] },
+  { targetId: "world-model", codes: ["wfm", "wml"] },
+  { targetId: "physical-ai", codes: ["itl", "pdt", "dtr", "eng", "hex"] },
+] as const satisfies readonly { targetId: TargetId; codes: readonly string[] }[];
+
+export const portfolioApps = portfolioGroups.flatMap(({ codes }) =>
+  codes.map((code) => portfolioAppSchema.parse({
+    code,
+    labelKey: `portfolio.${code}`,
+    roleKey: `portfolio.${code}.role`,
+    status: "active",
+    url: `https://${code}.aserdargun.com`,
+  })),
+);

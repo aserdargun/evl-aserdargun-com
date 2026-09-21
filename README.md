@@ -12,8 +12,19 @@ score.
 - `/tr` — Turkish workbench
 - `/` — permanent redirect to `/en` in Azure Static Web Apps
 
-The initial corpus connects EVL to the live USL, LLM, CTX, HNS, SEC, WFM, and
-ENG applications as a shared verification layer.
+The portfolio map places 22 related public resources into seven evaluation
+areas: model adaptation (USL, ADP), inference and deployment (LLM, TFL, LCL,
+CLD, DCL), context and memory (CTX, MEM), agents (HNS, ARL, DPL, CUL, AOS),
+security (SEC), world models (WFM, WML), and physical AI (ITL, PDT, DTR, ENG,
+HEX). These are learning relationships, not connected runtimes or verified
+performance claims. The full system link returns to the matching language on
+aserdargun.com. External resource links open separately without contract data.
+
+The map was reconciled with the public records in aserdargun-com's
+`data/living-system.json` and `data/system-focus.json` on 2026-09-21. It is a
+bundled editorial selection, not a live feed or uptime monitor. AOS describes
+runtime architecture; simulation and educational resources retain their own
+measurement boundaries.
 
 ## Privacy boundary
 
@@ -52,10 +63,14 @@ checkout before terminating it. It refuses foreign processes.
 ## Evidence policy
 
 Bundled sources are primary NIST, Anthropic, and OpenAI materials. Every record
-carries a publication date when available, a current verification date, an
+carries a publication date when available, a dated source review, an
 evidence tier, supported patterns, and a visible limitation. Reference
 contracts are planning examples, not benchmark results. The evidence ledger
 supports method design; it does not certify a model, system, vendor, or release.
+All five source pages were reviewed on 2026-09-21. TEVV-Athlon remains an initial
+public draft; its displayed publication date is the announcement date (2026-08-07),
+not the page creation date. OpenAI Graders retains its legacy/deprecation caveat.
+The ledger displays which evaluation patterns each source supports.
 
 ## Assessment boundary
 
@@ -70,6 +85,11 @@ assumptions, uncertainty acknowledgment, and all four layer coverage states.
 Critical layers cannot bypass the gate by being marked not applicable. Source
 freshness and review dates are rechecked every minute and when the page regains
 focus. Grader configurations and source references remain predefined examples.
+Reliability metrics are named in both languages; exported metric identifiers and
+ratio units remain stable. Example thresholds and trial counts are illustrative,
+not validated sample-size recommendations. Real release decisions still require
+repeatable measurements, limits, rollback conditions, and a responsible human's
+approval outside EVL.
 
 ## Release contract
 

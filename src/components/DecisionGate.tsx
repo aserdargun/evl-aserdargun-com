@@ -15,8 +15,9 @@ export function DecisionGate({ locale, result, canExport, exportError, onExport,
         <p>{t(locale, `gate.${result.gate}.description` as MessageKey)}</p>
       </div>
       <p className="gate-boundary">{t(locale, "gate.boundary")}</p>
+      <p className="gate-boundary">{t(locale, "gate.nextStep")}</p>
       <div className="finding-list">
-        <h3>{result.gate === "ready" ? (locale === "en" ? "Why it is ready" : "Neden hazır") : (locale === "en" ? "Decision trail" : "Karar izi")}</h3>
+        <h3>{t(locale, result.gate === "ready" ? "gate.whyReady" : "gate.decisionTrail")}</h3>
         {result.findings.length === 0 ? (
           <p className="finding"><Icon name="check" />{t(locale, "gate.noFindings")}</p>
         ) : result.findings.map((finding, index) => {
