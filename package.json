@@ -17,7 +17,8 @@
     "verify:artifact": "node scripts/verify-artifact.mjs",
     "start:codex": "npm run dev",
     "stop:codex": "node scripts/stop-preview.mjs --port 4178",
-    "validate": "npm run lint && npm run typecheck && npm run test && node --test scripts/stop-preview.test.mjs && npm run build && npm run verify:artifact && node --test tests/artifact-contract.test.mjs && npm run test:e2e && git diff --check"
+    "validate": "npm run lint && npm run typecheck && npm run test && node --test scripts/stop-preview.test.mjs && npm run build && npm run verify:artifact && node --test tests/artifact-contract.test.mjs && npm run test:e2e && git diff --check",
+    "sync:portfolio": "node scripts/sync-portfolio-lock.mjs"
   },
   "dependencies": {
     "@fontsource-variable/ibm-plex-sans": "5.3.0",

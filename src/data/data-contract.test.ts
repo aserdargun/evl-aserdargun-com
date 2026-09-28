@@ -63,7 +63,7 @@ describe("bundled EVL data", () => {
   it("marks CTX active and every active relationship link as HTTPS", () => {
     expect(portfolioApps.find(({ code }) => code === "ctx")).toMatchObject({
       status: "active",
-      url: "https://ctx.aserdargun.com",
+      url: "https://ctx.aserdargun.com/",
     });
     expect(
       portfolioApps

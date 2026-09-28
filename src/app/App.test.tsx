@@ -89,13 +89,13 @@ describe("EVL application", () => {
     render(<App initialPath="/en" />);
     expect(screen.getByRole("link", { name: /HNS/i })).toHaveAttribute(
       "href",
-      "https://hns.aserdargun.com",
+      "https://hns.aserdargun.com/",
     );
     const ctx = screen.getByTestId("portfolio-ctx");
     expect(ctx).not.toHaveTextContent("Planned");
     expect(within(ctx).getByRole("link")).toHaveAttribute(
       "href",
-      "https://ctx.aserdargun.com",
+      "https://ctx.aserdargun.com/",
     );
   });
 

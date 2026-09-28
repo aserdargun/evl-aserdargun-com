@@ -1,0 +1,137 @@
+{
+  "source": "aserdargun-com/data/living-system.json",
+  "applications": [
+    {
+      "code": "adp",
+      "address": "https://adp.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "aos",
+      "address": "https://aos.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "arl",
+      "address": "https://arl.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "cld",
+      "address": "https://cld.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "cul",
+      "address": "https://cul.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "ctx",
+      "address": "https://ctx.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "dcl",
+      "address": "https://dcl.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "dpl",
+      "address": "https://dpl.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "eng",
+      "address": "https://eng.aserdargun.com/",
+      "focusState": "horizon",
+      "status": "active"
+    },
+    {
+      "code": "hex",
+      "address": "https://hex.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "hns",
+      "address": "https://hns.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "itl",
+      "address": "https://itl.aserdargun.com/",
+      "focusState": "horizon",
+      "status": "live"
+    },
+    {
+      "code": "lcl",
+      "address": "https://lcl.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "llm",
+      "address": "https://llm.aserdargun.com/",
+      "focusState": "foundation",
+      "status": "live"
+    },
+    {
+      "code": "mem",
+      "address": "https://mem.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "pdt",
+      "address": "https://pdt.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "dtr",
+      "address": "https://dtr.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "sec",
+      "address": "https://sec.aserdargun.com/",
+      "focusState": "assurance",
+      "status": "live"
+    },
+    {
+      "code": "tfl",
+      "address": "https://tfl.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    },
+    {
+      "code": "usl",
+      "address": "https://usl.aserdargun.com/",
+      "focusState": "foundation",
+      "status": "live"
+    },
+    {
+      "code": "wfm",
+      "address": "https://wfm.aserdargun.com/",
+      "focusState": "horizon",
+      "status": "live"
+    },
+    {
+      "code": "wml",
+      "address": "https://wml.aserdargun.com/",
+      "focusState": "active",
+      "status": "live"
+    }
+  ]
+}
