@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://evl.aserdargun.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="EVL - AI Evaluation & Reliability Lab" />
     <meta property="og:description" content="Plan AI evaluation contracts across the aserdargun.com labs. Local planning checks, explicit evidence limits, no automated certification." />
@@ -30,6 +31,25 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>AI Evaluation &amp; Reliability Lab</h1>
+      <p>
+        EVL is a bilingual, evidence-aware workbench for evaluation contracts and deterministic AI
+        release decisions. The contract under edit, the selected target, and the evaluation result
+        stay in the browser; only an explicitly exported envelope leaves the workbench, and no
+        certification is issued.
+      </p>
+      <p>The workbench covers:</p>
+      <ul>
+        <li>Evaluation contracts across the output, trajectory, outcome, robustness, safety, and operations layers</li>
+        <li>A decision gate that holds on critical-layer findings instead of collapsing to an average</li>
+        <li>An evidence ledger, a pattern library, and the portfolio map of the aserdargun.com labs</li>
+      </ul>
+      <p>
+        The full workbench needs JavaScript. With JavaScript disabled, this page lists what the lab
+        covers; the contract editor and the decision gate are unavailable.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
