@@ -44,3 +44,26 @@ test("mobile render is linear, operable, and overflow free", async ({ page }) =>
   await expect(page.locator(".decision-rail")).toHaveCSS("position", "static");
   expect(consoleErrors).toEqual([]);
 });
+
+test("evidence ledger keeps column headers for assistive tech at every width", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/en");
+    const head = page.locator(".evidence-ledger thead");
+    // display:none would drop the header row from the accessibility tree, so a
+    // screen-reader user would lose the Source/Tier/Limitation association.
+    await expect(head).not.toHaveCSS("display", "none");
+    await expect(page.locator(".evidence-ledger th").first()).toHaveAttribute("scope", "col");
+    // On mobile the header is visually hidden, not removed: it must not add a gap.
+    if (width === 390) {
+      const { headBox, firstRowTop } = await page.evaluate(() => {
+        const head = document.querySelector(".evidence-ledger thead")!.getBoundingClientRect();
+        const row = document.querySelector(".evidence-ledger tbody tr")!.getBoundingClientRect();
+        return { headBox: { width: head.width, height: head.height }, firstRowTop: row.top };
+      });
+      expect(headBox.width).toBeLessThanOrEqual(1);
+      expect(headBox.height).toBeLessThanOrEqual(1);
+      expect(firstRowTop).toBeGreaterThanOrEqual(headBox.height);
+    }
+  }
+});

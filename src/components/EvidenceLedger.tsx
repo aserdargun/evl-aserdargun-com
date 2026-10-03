@@ -34,7 +34,7 @@ export function EvidenceLedger({ locale, filter, onFilter }: Props) {
       <p className="observer-note">{t(locale, "evidence.boundary")}</p>
       <div className="evidence-table-wrap">
         <table>
-          <thead><tr><th>{t(locale, "evidence.source")}</th><th>{t(locale, "evidence.tier")}</th><th>{t(locale, "evidence.limitation")}</th></tr></thead>
+          <thead><tr><th scope="col">{t(locale, "evidence.source")}</th><th scope="col">{t(locale, "evidence.tier")}</th><th scope="col">{t(locale, "evidence.limitation")}</th></tr></thead>
           <tbody>
             {visibleSources.map((source) => (
               <tr key={source.id}>
