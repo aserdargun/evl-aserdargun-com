@@ -45,6 +45,39 @@ describe("bundled EVL data", () => {
     );
   });
 
+  it("resolves every pattern the ledger publishes a source as supporting", () => {
+    // The reference above is checked from the contract and pattern side; this is
+    // the other direction. The ledger renders a source's scope from the
+    // patterns it claims to support, and its layer filter resolves the same
+    // ids. An id that resolves to nothing therefore drops the pattern out of
+    // the published scope and out of the filter without any error, so the
+    // reference has to be checked from this side too.
+    const patternIds = new Set(patterns.map(({ id }) => id));
+    const unresolved = evidenceSources.flatMap(({ id, supportedPatternIds }) =>
+      supportedPatternIds
+        .filter((patternId) => !patternIds.has(patternId))
+        .map((patternId) => `${id} -> ${patternId}`),
+    );
+
+    expect(unresolved).toEqual([]);
+  });
+
+  it("keeps every layer the ledger offers as a filter reachable", () => {
+    // patternSchema already rejects a layer outside LAYER_IDS at import, so
+    // this is the other half: a filter control is built from LAYER_IDS, and a
+    // layer that no source reaches would render an empty table with nothing to
+    // explain why it is empty.
+    const unreached = LAYER_IDS.filter(
+      (layerId) =>
+        !evidenceSources.some((source) =>
+          patterns
+            .filter((pattern) => source.supportedPatternIds.includes(pattern.id))
+            .some(({ layerIds }) => layerIds.includes(layerId)),
+        ),
+    );
+    expect(unreached).toEqual([]);
+  });
+
   it("ships reference contracts that start at ready", () => {
     for (const contract of referenceContracts) {
       const target = targets.find(({ id }) => id === contract.targetId);
