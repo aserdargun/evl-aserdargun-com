@@ -24,6 +24,26 @@ export async function verifyArtifact() {
   assert.match(html, /\/assets\/[^"']+-[A-Za-z0-9_-]{8,}\.(?:js|css)/, "index must reference hashed assets");
   assert.equal(assets.some((name) => name.endsWith(".map")), false, "source maps must not ship");
 
+  // One document serves every route, so the static URL identity has to be a URL
+  // that actually returns 200. `/` is a permanent redirect to `/en`, so a
+  // canonical pointing at it tells crawlers this page duplicates itself.
+  assert.match(
+    html,
+    /<link rel="canonical" href="https:\/\/evl\.aserdargun\.com\/en"/,
+    "canonical must name a route that serves 200, not the redirecting root",
+  );
+  for (const [hreflang, href] of [
+    ["en", "https://evl.aserdargun.com/en"],
+    ["tr", "https://evl.aserdargun.com/tr"],
+    ["x-default", "https://evl.aserdargun.com/en"],
+  ]) {
+    assert.match(
+      html,
+      new RegExp(`<link rel="alternate" hreflang="${hreflang}" href="${href}"`),
+      `index must pair hreflang="${hreflang}" with href="${href}" in one alternate link`,
+    );
+  }
+
   const config = JSON.parse(configText);
   assert.deepEqual(config.routes?.find(({ route }) => route === "/"), { route: "/", redirect: "/en", statusCode: 301 });
   assert.equal(config.navigationFallback?.rewrite, "/index.html");

@@ -4,7 +4,7 @@ import { evaluateContract } from "../domain/evaluate-contract";
 import { evidenceSources } from "../data/evidence";
 import { buildExportEnvelope, downloadExport } from "../domain/export-contract";
 import { parseContract, type LayerId } from "../domain/schemas";
-import { localeFromPath, t, type Locale } from "../i18n";
+import { localeFromPath, pathForLocale, t, type Locale } from "../i18n";
 import { ContractEditor } from "../components/ContractEditor";
 import { CoverageMatrix } from "../components/CoverageMatrix";
 import { DecisionGate } from "../components/DecisionGate";
@@ -15,6 +15,12 @@ import { PortfolioMap } from "../components/PortfolioMap";
 import { PrivacyNote } from "../components/PrivacyNote";
 import { TargetRail } from "../components/TargetRail";
 import { useWorkbench } from "./use-workbench";
+
+// The deployment answers on two hostnames — the custom domain and the one Azure
+// generates — so an identity derived from window.location would publish a
+// different canonical for the same page. The page identity is declared once here
+// and re-pointed per locale the way the title already is.
+const CANONICAL_ORIGIN = "https://evl.aserdargun.com";
 
 export function App({ initialPath }: { initialPath?: string }) {
   const [locale, setLocale] = useState<Locale>(() => localeFromPath(initialPath ?? window.location.pathname));
@@ -31,6 +37,15 @@ export function App({ initialPath }: { initialPath?: string }) {
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute("content", t(locale, "app.metaDescription"));
+    // `/` is a permanent redirect to `/en`, so it can never be this page's own
+    // address. Each locale names the route that actually serves it.
+    const canonical = `${CANONICAL_ORIGIN}${pathForLocale(locale)}`;
+    document
+      .querySelector('link[rel="canonical"]')
+      ?.setAttribute("href", canonical);
+    document
+      .querySelector('meta[property="og:url"]')
+      ?.setAttribute("content", canonical);
   }, [locale]);
 
   useEffect(() => {
