@@ -24,6 +24,32 @@ export async function verifyArtifact() {
   assert.match(html, /\/assets\/[^"']+-[A-Za-z0-9_-]{8,}\.(?:js|css)/, "index must reference hashed assets");
   assert.equal(assets.some((name) => name.endsWith(".map")), false, "source maps must not ship");
 
+  /* Everything above reads index.html, so it only ever sees what the document
+   * links. Fonts are requested from inside the stylesheet, and this build ships
+   * sixteen of them, so the artifact check was blind to all of them: deleting
+   * three referenced subsets still verified, and the live page would then fall
+   * back to a system face with every gate green. Each url() target is resolved
+   * against dist instead. */
+  const cssFiles = (await readdir(path.join(repositoryRoot, "dist/assets"))).filter((name) =>
+    name.endsWith(".css"),
+  );
+  const fontReferences = new Map();
+  for (const name of cssFiles) {
+    const sheet = await readFile(path.join(repositoryRoot, "dist/assets", name), "utf8");
+    for (const [, url] of sheet.matchAll(/url\(\s*['"]?(\/[^)'"\s]+)/g)) {
+      fontReferences.set(url, name);
+    }
+  }
+  assert(fontReferences.size > 0, "stylesheets must request at least one asset");
+  for (const [url, name] of fontReferences) {
+    const info = await stat(path.join(repositoryRoot, "dist", url)).catch(() => null);
+    assert.equal(
+      info?.isFile(),
+      true,
+      `${url} is requested by ${name} but missing from the artifact`,
+    );
+  }
+
   // One document serves every route, so the static URL identity has to be a URL
   // that actually returns 200. `/` is a permanent redirect to `/en`, so a
   // canonical pointing at it tells crawlers this page duplicates itself.
